@@ -3,6 +3,7 @@ import 'package:dukkantek/Resources/my_textfield.dart';
 import 'package:dukkantek/Signup/Controller/signup_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:load/load.dart';
 
 class SignupPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -66,7 +67,9 @@ class SignupPage extends StatelessWidget {
       onPressed: () {
         FocusScope.of(context).unfocus();
         if (_formKey.currentState!.validate()) {
+          showLoadingDialog();
           controller.signupApiHit().then((isSuccess) {
+            hideLoadingDialog();
             if (isSuccess) {
               Get.back();
             } else {

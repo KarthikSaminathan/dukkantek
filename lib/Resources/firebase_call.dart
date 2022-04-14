@@ -28,74 +28,67 @@ class FirebaseCall {
   }
 
   static Future<UserInformation?> login(String email, String password) async {
-    String? uid = await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email, password: password)
-        .then((value) {
-      if (value.user != null) {
-        return value.user!.uid;
-      } else {
-        return null;
-      }
-    });
-    UserInformation? info = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        if (documentSnapshot.data() != null) {
-          return UserInformation.fromJson(
-              documentSnapshot.data() as Map<String, dynamic>);
+    try {
+      String? uid = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((value) {
+        if (value.user != null) {
+          return value.user!.uid;
         } else {
           return null;
         }
+      }).catchError((error) {
+        return null;
+      });
+      if (uid != null) {
+        UserInformation? info = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(uid)
+            .get()
+            .then((DocumentSnapshot documentSnapshot) {
+          if (documentSnapshot.exists) {
+            if (documentSnapshot.data() != null) {
+              return UserInformation.fromJson(
+                  documentSnapshot.data() as Map<String, dynamic>);
+            } else {
+              return null;
+            }
+          } else {
+            return null;
+          }
+        });
+        return info;
       } else {
         return null;
       }
-    });
-    return info;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
   }
 
   static Future<UserInformation?> signInWithGoogle() async {
-    // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
     final GoogleSignInAuthentication? googleAuth =
         await googleUser?.authentication;
-
-    // Create a new credential
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
 
-    // Once signed in, return the UserCredential
-    String? uId = await FirebaseAuth.instance
+    UserCredential userCredential = await FirebaseAuth.instance
         .signInWithCredential(credential)
         .then((usercred) {
-      print(usercred);
-      return usercred.user != null ? usercred.user!.uid : null;
+      return usercred;
     });
-
-    if (uId != null) {
-      UserInformation? info = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uId)
-          .get()
-          .then((DocumentSnapshot documentSnapshot) {
-        if (documentSnapshot.exists) {
-          if (documentSnapshot.data() != null) {
-            return UserInformation.fromJson(
-                documentSnapshot.data() as Map<String, dynamic>);
-          } else {
-            return null;
-          }
-        } else {
-          return null;
-        }
-      });
-      return info;
+    if (userCredential.additionalUserInfo != null &&
+        userCredential.additionalUserInfo!.profile != null) {
+      return UserInformation(
+          firstName: userCredential.additionalUserInfo!.profile!['name'],
+          lastName: userCredential.additionalUserInfo!.profile!['family_name'],
+          emailId: userCredential.additionalUserInfo!.profile!['email']);
+    } else {
+      return null;
     }
   }
 }

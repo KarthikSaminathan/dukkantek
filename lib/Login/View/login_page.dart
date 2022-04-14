@@ -4,9 +4,11 @@ import 'package:dukkantek/Resources/firebase_call.dart';
 import 'package:dukkantek/Resources/my_button.dart';
 import 'package:dukkantek/Resources/my_routes.dart';
 import 'package:dukkantek/Resources/my_textfield.dart';
+import 'package:dukkantek/Resources/my_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:load/load.dart';
 
 class LoginPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -59,14 +61,19 @@ class LoginPage extends StatelessWidget {
       onPressed: () async {
         FocusScope.of(context).unfocus();
         if (_formKey.currentState!.validate()) {
+          showLoadingDialog();
           FirebaseCall.login(
                   controller.emailId.toLowerCase(), controller.password)
               .then((user) {
+            hideLoadingDialog();
             if (user != null) {
               Get.to(MainPage(
                 info: user,
               ));
-            } else {}
+            } else {
+              MyToast.showToast(
+                  'Invalid credential or Something went wrong. Please try again later');
+            }
           });
         } else {}
       },
