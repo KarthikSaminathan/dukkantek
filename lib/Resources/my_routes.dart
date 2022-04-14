@@ -1,3 +1,4 @@
+import 'package:dukkantek/Login/Modal/user_information.dart';
 import 'package:dukkantek/Login/View/login_page.dart';
 import 'package:dukkantek/Main/View/main_page.dart';
 import 'package:dukkantek/Signup/View/signup_page.dart';
@@ -20,7 +21,9 @@ class MyRoutes {
       ),
       GetPage(
         name: mainPageRoute,
-        page: () => MainPage(),
+        page: () => MainPage(
+          info: UserInformation(),
+        ),
       )
     ];
   }

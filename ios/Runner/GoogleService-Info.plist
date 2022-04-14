@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>620518869063-1hh6bh5asc0lva474j5gq27qdpre9tnb.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.620518869063-1hh6bh5asc0lva474j5gq27qdpre9tnb</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBKTqCE6MIurmBnOH2S4_9om7Kw9N_TfYg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>620518869063</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.dukkantek.interview</string>
+	<key>PROJECT_ID</key>
+	<string>dukkantek-1a2a3</string>
+	<key>STORAGE_BUCKET</key>
+	<string>dukkantek-1a2a3.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:620518869063:ios:0ff04687d0b52b02560962</string>
+</dict>
+</plist>

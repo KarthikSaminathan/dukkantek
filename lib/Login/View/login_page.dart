@@ -1,8 +1,10 @@
 import 'package:dukkantek/Login/Controller/login_controller.dart';
 import 'package:dukkantek/Main/View/main_page.dart';
+import 'package:dukkantek/Resources/firebase_call.dart';
 import 'package:dukkantek/Resources/my_button.dart';
 import 'package:dukkantek/Resources/my_routes.dart';
 import 'package:dukkantek/Resources/my_textfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,11 +21,11 @@ class LoginPage extends StatelessWidget {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _textfield(MyTextFieldType.email),
+                    _textfield(MyTextFieldType.email, controller.emailId),
                     const SizedBox(
                       height: 20,
                     ),
-                    _textfield(MyTextFieldType.password),
+                    _textfield(MyTextFieldType.password, controller.password),
                     const SizedBox(
                       height: 20,
                     ),
@@ -40,9 +42,10 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  _textfield(MyTextFieldType type) {
+  _textfield(MyTextFieldType type, String value) {
     return MyTextField(
       keyboardtype: type,
+      initialValue: value,
       onchanged: (text) {
         controller.updateValue(type, text);
       },
@@ -53,13 +56,19 @@ class LoginPage extends StatelessWidget {
     return MyButton(
       buttonName: 'Login',
       width: 150,
-      onPressed: () {
+      onPressed: () async {
         FocusScope.of(context).unfocus();
         if (_formKey.currentState!.validate()) {
-          Get.to(MainPage());
-        } else {
-          print('validation failed');
-        }
+          FirebaseCall.login(
+                  controller.emailId.toLowerCase(), controller.password)
+              .then((user) {
+            if (user != null) {
+              Get.to(MainPage(
+                info: user,
+              ));
+            } else {}
+          });
+        } else {}
       },
     );
   }
@@ -68,13 +77,17 @@ class LoginPage extends StatelessWidget {
     return MyButton(
       buttonName: 'Google Login',
       width: 150,
-      onPressed: () {
+      onPressed: () async {
         FocusScope.of(context).unfocus();
-        if (_formKey.currentState!.validate()) {
-          Get.to(MainPage());
-        } else {
-          print('validation failed');
-        }
+        FirebaseCall.signInWithGoogle().then((userinfo) {
+          if (userinfo != null) {
+            Get.to(MainPage(
+              info: userinfo,
+            ));
+          } else {
+            Get.toNamed(MyRoutes.signupPageRoute);
+          }
+        });
       },
     );
   }
