@@ -16,7 +16,7 @@ class MainPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Welcome'),
       ),
-      body: Center(child: Text('Hi ${info.firstName} ${info.lastName}')),
+      body: Center(child: Text('Hello ${info.emailId}')),
     );
   }
 }

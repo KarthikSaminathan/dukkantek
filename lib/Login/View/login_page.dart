@@ -5,7 +5,6 @@ import 'package:dukkantek/Resources/my_button.dart';
 import 'package:dukkantek/Resources/my_routes.dart';
 import 'package:dukkantek/Resources/my_textfield.dart';
 import 'package:dukkantek/Resources/my_toast.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:load/load.dart';
